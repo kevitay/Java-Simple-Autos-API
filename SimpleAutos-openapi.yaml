@@ -1,0 +1,191 @@
+openapi: '3.0.2'
+info:
+  title: Simple Automobiles
+  version: '1.0'
+servers:
+  - url: http://localhost:8080
+
+components:
+  schemas:
+    automobile:
+      description: a single automobile 
+      type: object
+      properties:
+        year:
+          type: integer
+          description: Model year
+          example: 1967
+        make: 
+          type: string
+          description: Manufacturer
+          example: Ford
+        model: 
+          type: string
+          description: Model Name or Designation
+          example: Mustang
+        color:
+          type: string
+          description: Actual color of the vehicle
+          example: RED
+        owner:
+          type: string
+          description: Name of the owner 
+          example: John Doe
+        vin:
+          type: string
+          description: vehicle identification number 
+          example: 7F03Z01025
+      required:
+        - year
+        - make
+        - model
+        - vin
+    autos-list:
+      description: List of automobiles
+      type: object
+      properties:
+        automobiles:
+          type: array
+          items:
+            $ref: '#/components/schemas/automobile'
+    update-auto:
+      description: Updatable fields of a car
+      type: object 
+      properties:
+        color:
+          type: string
+        owner:
+          type: string 
+    error-message:
+      type: object
+      properties:
+        message: 
+          type: string
+
+paths:
+  /api/autos:
+    get:
+      tags:
+        - Simple Automobiles
+      description: Search for automobiles
+      operationId: searchAutos
+      parameters:
+      - name: color
+        in: query
+        schema: 
+          type: string
+        required: false
+      - name: make
+        in: query
+        schema: 
+          type: string
+        required: false
+      responses:
+        '200':
+          description: At least one automobile exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/autos-list'
+        '204':
+          description: No automobiles found
+
+    post:
+      tags:
+        - Simple Automobiles
+      description: Add an automobile
+      operationId: addAuto
+      requestBody:
+        description: Automobile to be added
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/automobile'
+      responses:
+        '200':
+          description: Automobile added successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/automobile'
+        '400':
+          description: Bad request 
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error-message'
+  /api/autos/{vin}:
+    get:
+      tags:
+        - Simple Automobiles
+      description: Find an automobile by its vin
+      operationId: findAuto
+      parameters:
+      - name: vin
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/automobile'
+        '204':
+          description: Vehicle not found
+    patch:
+      tags:
+        - Simple Automobiles
+      description: Update owner, or color of vehicle
+      operationId: updateAuto
+      parameters:
+      - name: vin
+        in: path
+        schema:
+          type: string
+        required: true
+      requestBody:
+        description: Details to be patched.  Only Color and Owner are updateable.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/update-auto'
+      responses:
+        '200':
+          description: Automobile updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/automobile'
+        '204':
+          description: Vehicle not found
+        '400':
+          description: Bad request 
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error-message'
+      
+    delete:
+      tags:
+        - Simple Automobiles
+      description: delete an automobile by its vin
+      operationId: deleteAuto
+      parameters:
+      - name: vin
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '202':
+          description: Automobile delete request accepted
+        '204':
+          description: Vehicle not found
+
+
+
+    
+          
