@@ -152,6 +152,14 @@ public class AutosControllerTests {
     }
 
     // GET /api/autos/{vin} returns auto with VIN matching VIN passed in request path; returns 200 OK or 204 vehicle not found
+    @Test
+    public void getAutoByVinReturnsAuto() throws Exception {
+        Automobile automobile = new Automobile(1967, "Ford", "Mustang", "AABBCC");
+        when(autosService.getAuto(anyString())).thenReturn(automobile);
+        autos.perform(get("/api/autos" + automobile.getVin()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("vin").value(automobile.getVin()));
+    }
 
     // PATCH /api/autos/{vin} (can update owner or color of vehicle matching VIN in Request Path variable) returns 200 auto updated successfully, 204 vehicle not found or 400 bad request
 
