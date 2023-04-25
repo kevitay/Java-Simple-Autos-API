@@ -16,4 +16,8 @@ public class AutosService {
         return null;
     }
 
+    public AutosList getAutos(String color) {
+        return null;
+    }
+
 }

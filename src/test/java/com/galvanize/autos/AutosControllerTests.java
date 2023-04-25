@@ -80,7 +80,7 @@ public class AutosControllerTests {
             automobiles.add(new Automobile(1967 + i, "Ford", "Mustang", "AABB" + i));
             automobiles.get(i).color = "red";
         }
-        when(autosService.getAutos(anyString(), anyString())).thenReturn(new AutosList(automobiles));
+        when(autosService.getAutos(anyString())).thenReturn(new AutosList(automobiles));
         autos.perform(get("/api/autos?color=red"))
         .andExpect(status().isOk())
                 .andExpect(jsonPath("$.automobiles", hasSize(5)))
@@ -90,6 +90,8 @@ public class AutosControllerTests {
                 .andExpect(jsonPath("$.automobiles[3].color").value("red"))
                 .andExpect(jsonPath("$.automobiles[4].color").value("red"));
     }
+
+
 
     // POST /api/autos adds auto that has information in request body returns 200 for successful
         //    {
