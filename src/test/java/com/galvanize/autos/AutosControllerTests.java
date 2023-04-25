@@ -13,9 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.startsWith;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(AutosController.class)
 public class AutosControllerTests {
@@ -38,7 +41,7 @@ public class AutosControllerTests {
         autos.perform(get("/api/autos"))
                 .andDo(print())
                 // Assert
-                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.automobiles", hasSize(5)));
     }
 
@@ -51,13 +54,23 @@ public class AutosControllerTests {
         // Act
         autos.perform(get("/api/autos"))
                 .andDo(print())
-                .andExpect(MockMvcResultMatchers.status().isNoContent());
+                .andExpect(status().isNoContent());
         // Assert
     }
 
     // GET /api/autos?color={color}&make={make} returns list of autos matching color and make
     // GET /api/autos?color={color} returns list of autos matching color
     // GET /api/autos?make={make}  returns list of autos matching make
+    @Test
+    public void getAutosSearchParamsExistsReturnsAutosList() throws Exception {
+        List<Automobile> automobiles = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            automobiles.add(new Automobile(1967 + i, "Ford", "Mustang", "AABB" + i));
+        }
+        autos.perform(get("/api/autos?color=red&make=ford"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.automobiles", hasSize(5)));
+    }
 
     // POST /api/autos adds auto that has information in request body returns 200 for successful
         //    {
