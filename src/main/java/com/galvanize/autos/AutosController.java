@@ -32,5 +32,8 @@ public class AutosController {
     }
 
     @PostMapping ("/api/autos")
+    public Automobile addAuto(@RequestBody Automobile auto) {
+        return autosService.addAuto(auto);
+    }
 
 }

@@ -16,7 +16,9 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -129,11 +131,13 @@ public class AutosControllerTests {
     @Test
     public void addAutoValidReturnsAuto() throws Exception {
         Automobile automobile = new Automobile(1967, "Ford", "Mustang", "AABBCC");
-        String json = "{\"year\": 1967, \"make\": \"Ford\", \"model\": \"Mustang\", \"color\": null, \"vin\": \"AABBCC\"}";
+        when(autosService.addAuto(any(Automobile.class))).thenReturn(automobile);
+        //String json = "{\"year\": 1967, \"make\": \"Ford\", \"model\": \"Mustang\", \"color\": null, \"vin\": \"AABBCC\"}";
         autos.perform(post("/api/autos").contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
+                        .content(mapper.writeValueAsString(automobile)))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("make").value("Ford"));
     }
 
 
