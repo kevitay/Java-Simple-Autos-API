@@ -4,24 +4,40 @@ package com.galvanize.autos;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-// Imports from Learn material
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 @WebMvcTest(AutosController.class)
 public class AutosControllerTests {
     @Autowired
     MockMvc autos;
 
+    @MockBean
+    AutosService autosService;
+
     // GET: /api/autos returns list of all autos in DB
+    @Test
+    public void getAutosNoParamsExistsReturnsAutosList() throws Exception {
+        // Arrange
+        List<Automobile> automobiles = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            automobiles.add(new Automobile(1967 + i, "Ford", "Mustang", "AABB" + i));
+        }
+        when(autosService.getAutos()).thenReturn(new AutosList(automobiles));
+        // Act
+        autos.perform(get("/api/autos"))
+                // Assert
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.automobiles", hasSize(5)));
+    }
 
 
     // GET: /api/autos no autos in DB returns 204 no content
