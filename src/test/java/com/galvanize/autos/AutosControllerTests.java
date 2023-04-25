@@ -2,6 +2,7 @@ package com.galvanize.autos;
 
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -43,6 +44,16 @@ public class AutosControllerTests {
 
 
     // GET: /api/autos no autos in DB returns 204 no content
+    @Test
+    public void getAutosNoParamsNoneReturnsNoContent() throws Exception {
+        // Arrange
+        when(autosService.getAutos()).thenReturn(new AutosList());
+        // Act
+        autos.perform(get("/api/autos"))
+                .andDo(print())
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
+        // Assert
+    }
 
     // GET /api/autos?color={color}&make={make} returns list of autos matching color and make
     // GET /api/autos?color={color} returns list of autos matching color
