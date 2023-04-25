@@ -8,6 +8,7 @@ public class AutosService {
     public AutosService() {
         // default constructor
     }
+
     public AutosList getAutos() {
         return null;
     }
@@ -16,7 +17,7 @@ public class AutosService {
         return null;
     }
 
-    public AutosList getAutos(String color) {
+    public AutosList getAutos(String searchQuery) {
         return null;
     }
 

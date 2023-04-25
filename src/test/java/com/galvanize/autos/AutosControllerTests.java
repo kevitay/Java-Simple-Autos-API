@@ -91,7 +91,24 @@ public class AutosControllerTests {
                 .andExpect(jsonPath("$.automobiles[4].color").value("red"));
     }
 
-
+    // GET /api/autos?make={make}  returns list of autos matching make
+    @Test
+    public void getAutosSearchMakeExistsReturnsAutosList() throws Exception {
+        List<Automobile> automobiles = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            automobiles.add(new Automobile(1967 + i, "Ford", "Mustang", "AABB" + i));
+            automobiles.get(i).make = "Ford";
+        }
+        when(autosService.getAutos(anyString())).thenReturn(new AutosList(automobiles));
+        autos.perform(get("/api/autos?make=Ford"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.automobiles", hasSize(5)))
+                .andExpect(jsonPath("$.automobiles[0].make").value("Ford"))
+                .andExpect(jsonPath("$.automobiles[1].make").value("Ford"))
+                .andExpect(jsonPath("$.automobiles[2].make").value("Ford"))
+                .andExpect(jsonPath("$.automobiles[3].make").value("Ford"))
+                .andExpect(jsonPath("$.automobiles[4].make").value("Ford"));
+    }
 
     // POST /api/autos adds auto that has information in request body returns 200 for successful
         //    {
