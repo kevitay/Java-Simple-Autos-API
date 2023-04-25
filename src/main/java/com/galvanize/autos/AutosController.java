@@ -40,7 +40,7 @@ public class AutosController {
 
     @GetMapping("/api/autos{vin}")
     public Automobile getAuto(@PathVariable String vin) {
-        return null;
+        return autosService.getAuto(vin);
     }
 
     @ExceptionHandler
