@@ -1,7 +1,9 @@
 package com.galvanize.autos;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 public class AutosController {
@@ -34,6 +36,12 @@ public class AutosController {
     @PostMapping ("/api/autos")
     public Automobile addAuto(@RequestBody Automobile auto) {
         return autosService.addAuto(auto);
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public void invalidAutoExceptionHandler(InvalidAutoException e) {
+
     }
 
 }

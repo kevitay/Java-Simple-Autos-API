@@ -140,9 +140,16 @@ public class AutosControllerTests {
                 .andExpect(jsonPath("make").value("Ford"));
     }
 
-
-
     // POST /api/autos adds auto that has information in request body returns 400 for bad request
+    @Test
+    public void addAutoBadRequestReturns400() throws Exception {
+        when(autosService.addAuto(any(Automobile.class))).thenThrow(InvalidAutoException.class);
+        String json = "{\"year\": 1967, \"make\": \"Ford\", \"model\": \"Mustang\", \"color\": null, \"vin\": \"AABBCC\"}";
+        autos.perform(post("/api/autos").contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
 
     // GET /api/autos/{vin} returns auto with VIN matching VIN passed in request path; returns 200 OK or 204 vehicle not found
 
