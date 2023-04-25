@@ -1,16 +1,29 @@
 package com.galvanize.autos;
 
 
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest
+// Imports from Learn material
+import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@WebMvcTest(AutosController.class)
 public class AutosControllerTests {
     @Autowired
     MockMvc autos;
 
     // GET: /api/autos returns list of all autos in DB
+
+
     // GET: /api/autos no autos in DB returns 204 no content
 
     // GET /api/autos?color={color}&make={make} returns list of autos matching color and make
