@@ -162,6 +162,17 @@ public class AutosControllerTests {
     }
 
     // PATCH /api/autos/{vin} (can update owner or color of vehicle matching VIN in Request Path variable) returns 200 auto updated successfully, 204 vehicle not found or 400 bad request
+    @Test
+    public void updateAutoWithObjectReturnsAuto() throws Exception {
+        Automobile automobile = new Automobile(1967, "Ford", "Mustang", "AABBCC");
+        when(autosService.updateAuto(anyString(), anyString(), anyString())).thenReturn(automobile);
+        autos.perform(patch("/api/autos/" + automobile.getVin())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content("{\"color\":\"red\", \"owner\":\"Bob\"}"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("color").value("red"))
+            .andExpect(jsonPath("owner").value("Bob"));
+    }
 
     // DELETE //api/autos/{vin} delete auto by VIN number in Request Path variable returns 200 auto delete request accepted or 204 vehicle not found
 

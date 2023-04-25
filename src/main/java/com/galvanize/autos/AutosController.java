@@ -43,6 +43,14 @@ public class AutosController {
         return autosService.getAuto(vin);
     }
 
+    @PatchMapping("/api/autos/{vin}")
+    public Automobile updateAuto(@PathVariable String vin, @RequestBody UpdateOwnerRequest update) {
+        Automobile automobile = autosService.updateAuto(vin, update.getColor(), update.getOwner());
+        automobile.setColor(update.getColor());
+        automobile.setOwner(update.getOwner());
+        return automobile;
+    }
+
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public void invalidAutoExceptionHandler(InvalidAutoException e) {
