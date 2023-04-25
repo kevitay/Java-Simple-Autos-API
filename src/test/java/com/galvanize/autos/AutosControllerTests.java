@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -58,8 +59,7 @@ public class AutosControllerTests {
     }
 
     // GET /api/autos?color={color}&make={make} returns list of autos matching color and make
-    // GET /api/autos?color={color} returns list of autos matching color
-    // GET /api/autos?make={make}  returns list of autos matching make
+        // GET /api/autos?make={make}  returns list of autos matching make
     @Test
     public void getAutosSearchParamsExistsReturnsAutosList() throws Exception {
         List<Automobile> automobiles = new ArrayList<>();
@@ -70,6 +70,25 @@ public class AutosControllerTests {
         autos.perform(get("/api/autos?color=red&make=ford"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.automobiles", hasSize(5)));
+    }
+
+    // GET /api/autos?color={color} returns list of autos matching color
+    @Test
+    public void getAutosSearchColorExistsReturnsAutosList() throws Exception {
+        List<Automobile> automobiles = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            automobiles.add(new Automobile(1967 + i, "Ford", "Mustang", "AABB" + i));
+            automobiles.get(i).color = "red";
+        }
+        when(autosService.getAutos(anyString(), anyString())).thenReturn(new AutosList(automobiles));
+        autos.perform(get("/api/autos?color=red"))
+        .andExpect(status().isOk())
+                .andExpect(jsonPath("$.automobiles", hasSize(5)))
+                .andExpect(jsonPath("$.automobiles[0].color").value("red"))
+                .andExpect(jsonPath("$.automobiles[1].color").value("red"))
+                .andExpect(jsonPath("$.automobiles[2].color").value("red"))
+                .andExpect(jsonPath("$.automobiles[3].color").value("red"))
+                .andExpect(jsonPath("$.automobiles[4].color").value("red"));
     }
 
     // POST /api/autos adds auto that has information in request body returns 200 for successful
