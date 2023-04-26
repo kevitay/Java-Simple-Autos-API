@@ -58,6 +58,8 @@ public class AutosController {
             return ResponseEntity.ok(automobile);
         } catch (AutoNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } catch (InvalidAutoException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 

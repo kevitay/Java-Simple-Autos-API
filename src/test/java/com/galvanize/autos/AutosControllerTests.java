@@ -131,7 +131,8 @@ public class AutosControllerTests {
     public void addAutoBadRequestReturns400() throws Exception {
         when(autosService.addAuto(any(Automobile.class))).thenThrow(InvalidAutoException.class);
         String json = "{\"year\": 1967, \"make\": \"Ford\", \"model\": \"Mustang\", \"color\": null, \"vin\": \"AABBCC\"}";
-        autos.perform(post("/api/autos").contentType(MediaType.APPLICATION_JSON)
+        autos.perform(post("/api/autos")
+                .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
@@ -178,14 +179,17 @@ public class AutosControllerTests {
                 .andExpect(status().isNoContent());
     }
 
-//    @Test
-//    public void updateAutoWithInvalidObjectReturnsBadRequest() throws Exception {
-//        doThrow(new AutoNotFoundException()).when(autosService).updateAuto(anyString(), anyString(), anyString());
-//        autos.perform(patch("/api/autos/AABBCC")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content("{\"color\":\"red\", \"owner\":\"Bob\"}"))
-//                .andExpect(status().isBadRequest());
-//    }
+    @Test
+    public void updateAutoWithInvalidObjectReturnsBadRequest() throws Exception {
+        Automobile automobile = new Automobile(1967, "Ford", "Mustang", "AABBCC");
+        doThrow(new InvalidAutoException()).when(autosService).updateAuto(anyString(), anyString(), anyString());
+        autos.perform(patch("/api/autos/AABBCC")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"color\":\"blue\", \"owner\":\"Bob\"}"))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+        verify(autosService).updateAuto(anyString(), anyString(), anyString());
+    }
 
     // DELETE //api/autos/{vin} delete auto by VIN number in Request Path variable returns 200 auto delete request accepted or 204 vehicle not found
     @Test
