@@ -1,5 +1,5 @@
 package com.galvanize.autos;
 
-public class AutoNotFoundException extends Throwable {
+public class AutoNotFoundException extends RuntimeException {
 
 }

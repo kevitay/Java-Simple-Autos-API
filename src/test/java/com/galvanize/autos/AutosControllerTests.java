@@ -185,6 +185,7 @@ public class AutosControllerTests {
     public void deleteAutoWithVinNotExistsReturnNoContent() throws Exception {
         doThrow(new AutoNotFoundException()).when(autosService).deleteAuto(anyString());
         autos.perform(delete("/api/autos/AABBCC"))
+                .andExpect(status().isNoContent());
 
     }
 
