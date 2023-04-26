@@ -169,6 +169,15 @@ public class AutosControllerTests {
             .andExpect(jsonPath("owner").value("Bob"));
     }
 
+    @Test
+    public void updateAutoWithObjectNotExistReturnsNoContent() throws Exception {
+        doThrow(new AutoNotFoundException()).when(autosService).updateAuto(anyString(), anyString(), anyString());
+        autos.perform(patch("/api/autos/AABBCC")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"color\":\"blue\", \"owner\":\"Bob\"}"))
+                .andExpect(status().isNoContent());
+    }
+
     // DELETE //api/autos/{vin} delete auto by VIN number in Request Path variable returns 200 auto delete request accepted or 204 vehicle not found
     @Test
     public void deleteAutoWithVinExistsReturns202() throws Exception {
