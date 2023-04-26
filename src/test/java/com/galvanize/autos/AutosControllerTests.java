@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
@@ -116,17 +115,6 @@ public class AutosControllerTests {
                 .andExpect(jsonPath("$.automobiles[4].make").value("Ford"));
     }
 
-    // POST /api/autos adds auto that has information in request body returns 200 for successful
-        //    {
-        //        "year": 1967,
-        //            "make": "Ford",
-        //            "model": "Mustang",
-        //            "color": "RED",
-        //            "owner": "John Doe",
-        //            "vin": "7F03Z01025"
-        //    }
-
-
     @Test
     public void addAutoValidReturnsAuto() throws Exception {
         Automobile automobile = new Automobile(1967, "Ford", "Mustang", "AABBCC");
@@ -158,6 +146,15 @@ public class AutosControllerTests {
         autos.perform(get("/api/autos" + automobile.getVin()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("vin").value(automobile.getVin()));
+    }
+
+    @Test
+    public void getAutoByVinNoExistReturnsAutoNotFound() throws Exception {
+        Automobile automobile = new Automobile(1967, "Ford", "Mustang", "AABBCC");
+        when(autosService.getAuto("AABBDD11")).thenReturn(automobile);
+        autos.perform(get("/api/autos" + automobile.getVin()))
+                .andExpect(status().isNoContent())
+                .andExpect((jsonPath("vin").value(automobile.getVin())));
     }
 
     // PATCH /api/autos/{vin} (can update owner or color of vehicle matching VIN in Request Path variable) returns 200 auto updated successfully, 204 vehicle not found or 400 bad request
