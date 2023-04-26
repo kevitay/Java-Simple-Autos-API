@@ -51,7 +51,6 @@ public class AutosController {
 
     @PatchMapping("/api/autos/{vin}")
     public ResponseEntity updateAuto(@PathVariable String vin, @RequestBody UpdateOwnerRequest update) {
-
         try {
             Automobile automobile = autosService.updateAuto(vin, update.getColor(), update.getOwner());
             automobile.setColor(update.getColor());
@@ -60,7 +59,6 @@ public class AutosController {
         } catch (AutoNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
-
     }
 
     @DeleteMapping("/api/autos/{vin}")
