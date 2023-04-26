@@ -38,9 +38,15 @@ public class AutosController {
         return autosService.addAuto(auto);
     }
 
-    @GetMapping("/api/autos{vin}")
-    public Automobile getAuto(@PathVariable String vin) {
-        return autosService.getAuto(vin);
+    @GetMapping("/api/autos/{vin}")
+    public ResponseEntity getAuto(@PathVariable String vin) {
+        try {
+            autosService.getAuto(vin);
+        } catch (AutoNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+
+        return ResponseEntity.ok(autosService.getAuto(vin));
     }
 
     @PatchMapping("/api/autos/{vin}")

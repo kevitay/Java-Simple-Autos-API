@@ -10,7 +10,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -143,18 +142,18 @@ public class AutosControllerTests {
     public void getAutoByVinReturnsAuto() throws Exception {
         Automobile automobile = new Automobile(1967, "Ford", "Mustang", "AABBCC");
         when(autosService.getAuto(anyString())).thenReturn(automobile);
-        autos.perform(get("/api/autos" + automobile.getVin()))
+        autos.perform(get("/api/autos/" + automobile.getVin()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("vin").value(automobile.getVin()));
     }
 
     @Test
     public void getAutoByVinNoExistReturnsAutoNotFound() throws Exception {
-        Automobile automobile = new Automobile(1967, "Ford", "Mustang", "AABBCC");
-        when(autosService.getAuto("AABBDD11")).thenReturn(automobile);
-        autos.perform(get("/api/autos" + automobile.getVin()))
-                .andExpect(status().isNoContent())
-                .andExpect((jsonPath("vin").value(automobile.getVin())));
+        doThrow(new AutoNotFoundException()).when(autosService).getAuto(anyString());
+        autos.perform(get("/api/autos/AABBCC"))
+                .andDo(print())
+                .andExpect(status().isNoContent());
+        verify(autosService).getAuto(anyString());
     }
 
     // PATCH /api/autos/{vin} (can update owner or color of vehicle matching VIN in Request Path variable) returns 200 auto updated successfully, 204 vehicle not found or 400 bad request
@@ -183,7 +182,6 @@ public class AutosControllerTests {
         doThrow(new AutoNotFoundException()).when(autosService).deleteAuto(anyString());
         autos.perform(delete("/api/autos/AABBCC"))
                 .andExpect(status().isNoContent());
-
     }
 
 }
