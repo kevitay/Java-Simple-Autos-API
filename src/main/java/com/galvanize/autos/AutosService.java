@@ -33,6 +33,10 @@ public class AutosService {
         return null;
     }
 
+    public Automobile updateAuto(String searchQuery) {
+        return null;
+    }
+
     public void deleteAuto(String vin) {
 
     }

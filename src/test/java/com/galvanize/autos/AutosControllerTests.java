@@ -10,12 +10,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
@@ -116,17 +114,6 @@ public class AutosControllerTests {
                 .andExpect(jsonPath("$.automobiles[4].make").value("Ford"));
     }
 
-    // POST /api/autos adds auto that has information in request body returns 200 for successful
-        //    {
-        //        "year": 1967,
-        //            "make": "Ford",
-        //            "model": "Mustang",
-        //            "color": "RED",
-        //            "owner": "John Doe",
-        //            "vin": "7F03Z01025"
-        //    }
-
-
     @Test
     public void addAutoValidReturnsAuto() throws Exception {
         Automobile automobile = new Automobile(1967, "Ford", "Mustang", "AABBCC");
@@ -144,7 +131,8 @@ public class AutosControllerTests {
     public void addAutoBadRequestReturns400() throws Exception {
         when(autosService.addAuto(any(Automobile.class))).thenThrow(InvalidAutoException.class);
         String json = "{\"year\": 1967, \"make\": \"Ford\", \"model\": \"Mustang\", \"color\": null, \"vin\": \"AABBCC\"}";
-        autos.perform(post("/api/autos").contentType(MediaType.APPLICATION_JSON)
+        autos.perform(post("/api/autos")
+                .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
@@ -155,9 +143,18 @@ public class AutosControllerTests {
     public void getAutoByVinReturnsAuto() throws Exception {
         Automobile automobile = new Automobile(1967, "Ford", "Mustang", "AABBCC");
         when(autosService.getAuto(anyString())).thenReturn(automobile);
-        autos.perform(get("/api/autos" + automobile.getVin()))
+        autos.perform(get("/api/autos/" + automobile.getVin()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("vin").value(automobile.getVin()));
+    }
+
+    @Test
+    public void getAutoByVinNoExistReturnsAutoNotFound() throws Exception {
+        doThrow(new AutoNotFoundException()).when(autosService).getAuto(anyString());
+        autos.perform(get("/api/autos/AABBCC"))
+                .andDo(print())
+                .andExpect(status().isNoContent());
+        verify(autosService).getAuto(anyString());
     }
 
     // PATCH /api/autos/{vin} (can update owner or color of vehicle matching VIN in Request Path variable) returns 200 auto updated successfully, 204 vehicle not found or 400 bad request
@@ -173,6 +170,27 @@ public class AutosControllerTests {
             .andExpect(jsonPath("owner").value("Bob"));
     }
 
+    @Test
+    public void updateAutoWithObjectNotExistReturnsNoContent() throws Exception {
+        doThrow(new AutoNotFoundException()).when(autosService).updateAuto(anyString(), anyString(), anyString());
+        autos.perform(patch("/api/autos/AABBCC")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"color\":\"blue\", \"owner\":\"Bob\"}"))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    public void updateAutoWithInvalidObjectReturnsBadRequest() throws Exception {
+        Automobile automobile = new Automobile(1967, "Ford", "Mustang", "AABBCC");
+        doThrow(new InvalidAutoException()).when(autosService).updateAuto(anyString(), anyString(), anyString());
+        autos.perform(patch("/api/autos/AABBCC")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"color\":\"blue\", \"owner\":\"Bob\"}"))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+        verify(autosService).updateAuto(anyString(), anyString(), anyString());
+    }
+
     // DELETE //api/autos/{vin} delete auto by VIN number in Request Path variable returns 200 auto delete request accepted or 204 vehicle not found
     @Test
     public void deleteAutoWithVinExistsReturns202() throws Exception {
@@ -186,7 +204,6 @@ public class AutosControllerTests {
         doThrow(new AutoNotFoundException()).when(autosService).deleteAuto(anyString());
         autos.perform(delete("/api/autos/AABBCC"))
                 .andExpect(status().isNoContent());
-
     }
 
 }
