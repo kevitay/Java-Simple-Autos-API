@@ -8,6 +8,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -59,8 +60,18 @@ class AutosServiceTest {
         assertThat(auto.getMake()).isEqualTo("Ford");
     }
 
+    // End of addAuto video, "Will leave other side of this for you to do"
+    // addAutoInvalidReturnsException???  addAutoInvalidReturnsList???
+
     @Test
     void getAuto() {
+        Automobile automobile = new Automobile(1967, "Ford", "Mustang", "AABBCC");
+        automobile.setColor("Red");
+        when(autosRepository.findByVin(anyString()))
+                .thenReturn(Optional.of(automobile));
+        Automobile auto = autosService.getAuto(automobile.getVin());
+        assertThat(auto).isNotNull();
+        assertThat(auto.getMake()).isEqualTo(automobile.getVin());
     }
 
     @Test
