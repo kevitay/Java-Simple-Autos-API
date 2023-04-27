@@ -64,14 +64,14 @@ class AutosServiceTest {
     // addAutoInvalidReturnsException???  addAutoInvalidReturnsList???
 
     @Test
-    void getAuto() {
+    void getAutoWithVinReturnsAuto() {
         Automobile automobile = new Automobile(1967, "Ford", "Mustang", "AABBCC");
         automobile.setColor("Red");
         when(autosRepository.findByVin(anyString()))
                 .thenReturn(Optional.of(automobile));
         Automobile auto = autosService.getAuto(automobile.getVin());
         assertThat(auto).isNotNull();
-        assertThat(auto.getMake()).isEqualTo(automobile.getVin());
+        assertThat(auto.getVin()).isEqualTo(automobile.getVin());
     }
 
     @Test

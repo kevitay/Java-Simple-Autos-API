@@ -41,7 +41,9 @@ public class AutosService {
     }
 
     public Automobile getAuto(String vin) {
-        return null;
+        return autosRepository.findByVin(vin).orElse(null);
+        // Line 44 video: "This is not the requirements, I'm going to leave that to you to fix later"???
+        // What are we "fixing"???
     }
 
     public Automobile updateAuto(String vin, String color, String owner) {
