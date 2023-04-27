@@ -33,13 +33,32 @@ public class AutosService {
         return null;
     }
 
-    public AutosList getAutos(String searchQuery) {
-        Optional<Automobile> automobiles = autosRepository.findBySearchQuery(searchQuery);
-        if(automobiles.isPresent()) {
-            return new AutosList();
+    public AutosList getAutosByMake(String make) {
+        List<Automobile> automobiles = autosRepository.findByMake(make);
+        if(!automobiles.isEmpty()) {
+            return new AutosList(automobiles);
         }
         return null;
     }
+
+    public AutosList getAutosByColor(String color) {
+        List<Automobile> automobiles = autosRepository.findByColor(color);
+        if(!automobiles.isEmpty()) {
+            return new AutosList(automobiles);
+        }
+        return null;
+    }
+
+
+
+
+//    public AutosList getAutos(String searchQuery) {
+//        Optional<Automobile> automobiles = autosRepository.findBySearchQuery(searchQuery);
+//        if(automobiles.isPresent()) {
+//            return new AutosList();
+//        }
+//        return null;
+//    }
 
 
     public Automobile addAuto(Automobile auto) {
