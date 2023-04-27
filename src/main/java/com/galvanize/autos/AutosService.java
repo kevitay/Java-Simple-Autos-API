@@ -10,6 +10,9 @@ public class AutosService {
     }
 
     public AutosList getAutos() {
+        // Query: select * from autos;
+        // Put that in a list
+        // Return a new AutosList with the list
         return null;
     }
 
