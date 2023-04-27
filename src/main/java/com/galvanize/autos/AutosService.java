@@ -14,10 +14,6 @@ public class AutosService {
         this.autosRepository = autosRepository;
     }
 
-    public AutosService() {
-        // default constructor
-    }
-
     public AutosList getAutos() {
         // Query: select * from autos;
         // Put that in a list
@@ -48,18 +44,6 @@ public class AutosService {
         }
         return null;
     }
-
-
-
-
-//    public AutosList getAutos(String searchQuery) {
-//        Optional<Automobile> automobiles = autosRepository.findBySearchQuery(searchQuery);
-//        if(automobiles.isPresent()) {
-//            return new AutosList();
-//        }
-//        return null;
-//    }
-
 
     public Automobile addAuto(Automobile auto) {
         return autosRepository.save(auto);
