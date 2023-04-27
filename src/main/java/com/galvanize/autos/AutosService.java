@@ -34,8 +34,13 @@ public class AutosService {
     }
 
     public AutosList getAutos(String searchQuery) {
+        Optional<Automobile> automobiles = autosRepository.findBySearchQuery(searchQuery);
+        if(automobiles.isPresent()) {
+            return new AutosList();
+        }
         return null;
     }
+
 
     public Automobile addAuto(Automobile auto) {
         return autosRepository.save(auto);
