@@ -80,6 +80,7 @@ class AutosServiceTest {
         automobile.setColor("Red");
         when(autosRepository.findByVin(anyString()))
                 .thenReturn(Optional.of(automobile));
+        when(autosRepository.save(any(Automobile.class))).thenReturn(automobile);
         Automobile auto = autosService.updateAuto(automobile.getVin(), "Purple", "Kevin");
         assertThat(auto).isNotNull();
         assertThat(auto.getVin()).isEqualTo(automobile.getVin());
