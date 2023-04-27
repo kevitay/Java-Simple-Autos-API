@@ -5,6 +5,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class AutosService {
 
+    AutosRepository autosRepository;
+
+    public AutosService(AutosRepository autosRepository) {
+        this.autosRepository = autosRepository;
+    }
+
     public AutosService() {
         // default constructor
     }
@@ -13,7 +19,7 @@ public class AutosService {
         // Query: select * from autos;
         // Put that in a list
         // Return a new AutosList with the list
-        return null;
+        return new AutosList(autosRepository.findAll());
     }
 
     public AutosList getAutos(String color, String make) {
