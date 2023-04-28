@@ -1,6 +1,7 @@
 package com.galvanize.autos;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import javax.persistence.*;
 import javax.xml.crypto.Data;
@@ -10,6 +11,7 @@ import java.util.Objects;
 @SuppressWarnings("JpaDataSourceORMInspection")
 @Entity
 @Table(name = "automobiles")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Automobile {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
