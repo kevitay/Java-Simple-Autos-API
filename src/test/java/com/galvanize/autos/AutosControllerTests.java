@@ -82,9 +82,9 @@ public class AutosControllerTests {
         List<Automobile> automobiles = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             automobiles.add(new Automobile(1967 + i, "Ford", "Mustang", "AABB" + i));
-            automobiles.get(i).color = "red";
+            automobiles.get(i).setColor("red");
         }
-        when(autosService.getAutos(anyString())).thenReturn(new AutosList(automobiles));
+        when(autosService.getAutosByColor(anyString())).thenReturn(new AutosList(automobiles));
         autos.perform(get("/api/autos?color=red"))
         .andExpect(status().isOk())
                 .andExpect(jsonPath("$.automobiles", hasSize(5)))
@@ -101,9 +101,8 @@ public class AutosControllerTests {
         List<Automobile> automobiles = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             automobiles.add(new Automobile(1967 + i, "Ford", "Mustang", "AABB" + i));
-            automobiles.get(i).make = "Ford";
         }
-        when(autosService.getAutos(anyString())).thenReturn(new AutosList(automobiles));
+        when(autosService.getAutosByMake(anyString())).thenReturn(new AutosList(automobiles));
         autos.perform(get("/api/autos?make=Ford"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.automobiles", hasSize(5)))

@@ -14,10 +14,6 @@ public class AutosService {
         this.autosRepository = autosRepository;
     }
 
-    public AutosService() {
-        // default constructor
-    }
-
     public AutosList getAutos() {
         // Query: select * from autos;
         // Put that in a list
@@ -33,7 +29,19 @@ public class AutosService {
         return null;
     }
 
-    public AutosList getAutos(String searchQuery) {
+    public AutosList getAutosByMake(String make) {
+        List<Automobile> automobiles = autosRepository.findByMake(make);
+        if(!automobiles.isEmpty()) {
+            return new AutosList(automobiles);
+        }
+        return null;
+    }
+
+    public AutosList getAutosByColor(String color) {
+        List<Automobile> automobiles = autosRepository.findByColor(color);
+        if(!automobiles.isEmpty()) {
+            return new AutosList(automobiles);
+        }
         return null;
     }
 

@@ -22,9 +22,9 @@ public class AutosController {
         if(color == null && make == null) {
             autosList = autosService.getAutos();
         } else if (make == null) {
-            autosList = autosService.getAutos(color);
+            autosList = autosService.getAutosByColor(color);
         } else if (color == null) {
-            autosList = autosService.getAutos(make);
+            autosList = autosService.getAutosByMake(make);
         } else {
             autosList = autosService.getAutos(color, make);
         }
