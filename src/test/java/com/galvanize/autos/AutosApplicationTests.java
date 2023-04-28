@@ -88,7 +88,14 @@ class AutosApplicationTests {
 
     // void getAutosNotExistsReturnsAutosNotFound
 
-
+    @Test
+    void getAutosNotExistsReturnsAutosNoContent() {
+        tearDown();
+        ResponseEntity<AutosList> response = restTemplate.getForEntity("/api/autos", AutosList.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+        assertThat(response.getBody()).isNull();
+        System.out.println(autosRepository);
+    }
 
     @Test
     void getAutosSearchReturnsAutosList() {
@@ -106,12 +113,46 @@ class AutosApplicationTests {
     }
 
     // void getAutosByMakeReturnsAutosList
+    @Test
+    void getAutosByMakeReturnsAutosList(){
+        String make = "Ford";
+        ResponseEntity<AutosList> response = restTemplate.getForEntity(
+                String.format("/api/autos?make=%s", make), AutosList.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody().isEmpty()).isFalse();
+        assertThat(response.getBody().getAutomobiles().size()).isGreaterThanOrEqualTo(1);
+        for (Automobile auto : response.getBody().getAutomobiles()) {
+            System.out.println(auto);
+        }
+    }
 
-
-    // void getAutosByColorReturnsAutosList
+    @Test
+    void getAutosByColorReturnsAutosList() {
+        String color = "BLACK";
+        ResponseEntity<AutosList> response = restTemplate.getForEntity(
+                String.format("/api/autos?color=%s", color), AutosList.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody().isEmpty()).isFalse();
+        assertThat(response.getBody().getAutomobiles().size()).isGreaterThanOrEqualTo(1);
+        for (Automobile auto : response.getBody().getAutomobiles()) {
+            System.out.println(auto);
+        }
+    }
 
 
     // void getAutoByVinReturnsAuto
+//    @Test
+//    void getAutoByVinReturnsAuto(){
+//        tearDown();
+//        Automobile auto = new Automobile(1995, "Ford", "F150", "FORD-03AABB79");
+//        testAutos.add(auto);
+//        System.out.println(testAutos);
+//        ResponseEntity<AutosList> response = restTemplate.getForEntity("/api/autos/FORD-03AABB79", AutosList.class);
+//        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+//        assertThat(response.getBody().getAutomobiles().size()).isGreaterThanOrEqualTo(1);
+//        assertThat(response.getBody().equals("{ \"year\": 1995, \"make\": \"Ford\", \"model\": \"F150\", \"color\": null, \"owner\": null }"));
+//
+//    }
 
 
     // void getAutoByVinInvalidReturnsAutoNotFound
