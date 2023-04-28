@@ -6,8 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -95,13 +94,32 @@ class AutosApplicationTests {
         String color = testAutos.get(seq).getColor();
         String make = testAutos.get(seq).getMake();
         ResponseEntity<AutosList> response = restTemplate.getForEntity(
-                String.format("api/autos?color=%s&make=%s", color, make), AutosList.class);
+                String.format("/api/autos?color=%s&make=%s", color, make), AutosList.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody().isEmpty()).isFalse();
         assertThat(response.getBody().getAutomobiles().size()).isGreaterThanOrEqualTo(1);
         for(Automobile auto: response.getBody().getAutomobiles()) {
             System.out.println(auto);
         }
+    }
+
+    @Test
+    void addAutoReturnsNewAutoDetails() {
+        Automobile automobile = new Automobile();
+        automobile.setVin("ABC123XX");
+        automobile.setYear(1995);
+        automobile.setMake("Ford");
+        automobile.setModel("Windstar");
+        automobile.setColor("Blue");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+        HttpEntity<Automobile> request = new HttpEntity<>(automobile, headers);
+
+        ResponseEntity<Automobile> response = restTemplate.postForEntity("/api/autos", request, Automobile.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody().getVin()).isEqualTo(automobile.getVin());
     }
 
 }
