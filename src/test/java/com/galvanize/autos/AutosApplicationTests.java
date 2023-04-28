@@ -141,6 +141,18 @@ class AutosApplicationTests {
 
 
     // void getAutoByVinReturnsAuto
+//    @Test
+//    void getAutoByVinReturnsAuto(){
+//        tearDown();
+//        Automobile auto = new Automobile(1995, "Ford", "F150", "FORD-03AABB79");
+//        testAutos.add(auto);
+//        System.out.println(testAutos);
+//        ResponseEntity<AutosList> response = restTemplate.getForEntity("/api/autos/FORD-03AABB79", AutosList.class);
+//        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+//        assertThat(response.getBody().getAutomobiles().size()).isGreaterThanOrEqualTo(1);
+//        assertThat(response.getBody().equals("{ \"year\": 1995, \"make\": \"Ford\", \"model\": \"F150\", \"color\": null, \"owner\": null }"));
+//
+//    }
 
 
     // void getAutoByVinInvalidReturnsAutoNotFound
