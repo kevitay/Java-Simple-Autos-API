@@ -86,7 +86,9 @@ class AutosApplicationTests {
         }
     }
 
-    // We write notExists, etc.
+    // void getAutosNotExistsReturnsAutosNotFound
+
+
 
     @Test
     void getAutosSearchReturnsAutosList() {
@@ -102,6 +104,18 @@ class AutosApplicationTests {
             System.out.println(auto);
         }
     }
+
+    // void getAutosByMakeReturnsAutosList
+
+
+    // void getAutosByColorReturnsAutosList
+
+
+    // void getAutoByVinReturnsAuto
+
+
+    // void getAutoByVinInvalidReturnsAutoNotFound
+
 
     @Test
     void addAutoReturnsNewAutoDetails() {
@@ -121,5 +135,19 @@ class AutosApplicationTests {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody().getVin()).isEqualTo(automobile.getVin());
     }
+
+    // void addAutoInvalidReturnsBadRequest
+
+
+    // void updateAutoColorByVinReturnsAutomobile
+
+
+    // void updateAutoOwnerByVinReturnsAutomobile
+
+
+    // void deleteAutoByVinReturnsAccepted
+
+
+    // void delteAutoByVinReturnsAutoNotFound
 
 }
