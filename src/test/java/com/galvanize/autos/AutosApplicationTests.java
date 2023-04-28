@@ -126,8 +126,18 @@ class AutosApplicationTests {
         }
     }
 
-
-    // void getAutosByColorReturnsAutosList
+    @Test
+    void getAutosByColorReturnsAutosList() {
+        String color = "BLACK";
+        ResponseEntity<AutosList> response = restTemplate.getForEntity(
+                String.format("/api/autos?color=%s", color), AutosList.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody().isEmpty()).isFalse();
+        assertThat(response.getBody().getAutomobiles().size()).isGreaterThanOrEqualTo(1);
+        for (Automobile auto : response.getBody().getAutomobiles()) {
+            System.out.println(auto);
+        }
+    }
 
 
     // void getAutoByVinReturnsAuto
