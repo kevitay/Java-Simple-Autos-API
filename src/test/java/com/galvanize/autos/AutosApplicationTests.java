@@ -113,6 +113,18 @@ class AutosApplicationTests {
     }
 
     // void getAutosByMakeReturnsAutosList
+    @Test
+    void getAutosByMakeReturnsAutosList(){
+        String make = "Ford";
+        ResponseEntity<AutosList> response = restTemplate.getForEntity(
+                String.format("/api/autos?make=%s", make), AutosList.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody().isEmpty()).isFalse();
+        assertThat(response.getBody().getAutomobiles().size()).isGreaterThanOrEqualTo(1);
+        for (Automobile auto : response.getBody().getAutomobiles()) {
+            System.out.println(auto);
+        }
+    }
 
 
     // void getAutosByColorReturnsAutosList
