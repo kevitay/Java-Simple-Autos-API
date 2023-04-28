@@ -50,7 +50,7 @@ public class AutosService {
     }
 
     public Automobile getAuto(String vin) {
-        return autosRepository.findByVin(vin).orElse(null);
+        return autosRepository.findByVin(vin).orElseThrow(AutoNotFoundException::new);
         // Line 44 video: "This is not the requirements, I'm going to leave that to you to fix later"???
         // What are we "fixing"???
     }
@@ -66,9 +66,9 @@ public class AutosService {
         return null;
     }
 
-    public Automobile updateAuto(String searchQuery) {
-        return null;
-    }
+//    public Automobile updateAuto(String searchQuery) {
+//        return null;
+//    }
 
     public void deleteAuto(String vin) {
         Optional<Automobile> oAuto = autosRepository.findByVin(vin);
