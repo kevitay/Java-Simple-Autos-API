@@ -88,7 +88,14 @@ class AutosApplicationTests {
 
     // void getAutosNotExistsReturnsAutosNotFound
 
-
+    @Test
+    void getAutosNotExistsReturnsAutosNotFound() {
+        tearDown();
+        ResponseEntity<AutosList> response = restTemplate.getForEntity("/api/autos", AutosList.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+        assertThat(response.getBody()).isNull();
+        System.out.println(autosRepository);
+    }
 
     @Test
     void getAutosSearchReturnsAutosList() {
