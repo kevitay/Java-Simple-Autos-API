@@ -74,6 +74,11 @@ public class AutosController {
         return ResponseEntity.accepted().build();
     }
 
+    @DeleteMapping("/api/autos")
+    public void deleteAllAutos() {
+            autosService.resetAutoRepo();
+    }
+
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public void invalidAutoExceptionHandler(InvalidAutoException e) {
