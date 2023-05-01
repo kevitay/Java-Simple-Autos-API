@@ -49,6 +49,8 @@ public class AutosService {
         return autosRepository.save(auto);
     }
 
+
+
     public Automobile getAuto(String vin) {
         return autosRepository.findByVin(vin).orElseThrow(AutoNotFoundException::new);
         // Line 44 video: "This is not the requirements, I'm going to leave that to you to fix later"???
@@ -77,6 +79,9 @@ public class AutosService {
         } else {
             throw new AutoNotFoundException();
         }
+    }
 
+    public void resetAutoRepo() {
+        autosRepository.deleteAll();
     }
 }
