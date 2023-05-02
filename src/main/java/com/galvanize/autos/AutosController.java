@@ -74,7 +74,7 @@ public class AutosController {
         return ResponseEntity.accepted().build();
     }
 
-    @DeleteMapping("/api/autos")
+    @DeleteMapping("/api/autos/clear")
     public void deleteAllAutos() {
             autosService.resetAutoRepo();
     }
